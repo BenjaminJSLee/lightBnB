@@ -107,7 +107,7 @@ const getAllProperties = function(options, limit = 10) {
   let query = `
   SELECT properties.*, AVG(rating) AS average_rating
   FROM properties
-  JOIN property_reviews ON properties.id=property_id
+  LEFT OUTER JOIN property_reviews ON properties.id=property_id
   `;
   const values = [];
   if (options.city || options.city === 0) {
@@ -154,9 +154,21 @@ exports.getAllProperties = getAllProperties;
  * @return {Promise<{}>} A promise to the property.
  */
 const addProperty = function(property) {
-  const propertyId = Object.keys(properties).length + 1;
-  property.id = propertyId;
-  properties[propertyId] = property;
-  return Promise.resolve(property);
+  let query = `INSERT INTO properties`;
+  const values = [];
+  let fields = `(`;
+  let queryValues = `VALUES (`;
+  for (const key in property) {
+    fields = `${fields} ${key},`;
+    values.push(property[key]);
+    queryValues = `${queryValues} $${values.length},`;
+  }
+  query = `${query} ${fields.slice(0,-1)})
+  ${queryValues.slice(0,-1)})
+  RETURNING *;`;
+
+  return pool.query(query, values)
+    .then((res) => res.rows[0])
+    .catch(err => console.error('query error', err.stack));
 }
 exports.addProperty = addProperty;
