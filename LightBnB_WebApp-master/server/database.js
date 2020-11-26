@@ -158,7 +158,7 @@ const addProperty = function(property) {
   const values = [];
   let fields = `(`;
   let queryValues = `VALUES (`;
-  for (const key in property) {
+  for (const key in property) { // assumes that all keys in the property object are valid for the property table
     fields = `${fields} ${key},`;
     values.push(property[key]);
     queryValues = `${queryValues} $${values.length},`;
