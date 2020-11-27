@@ -48,7 +48,7 @@ function getAllReservations() {
 const submitReservation = function(data) {
   return $.ajax({
     method: "POST",
-    url: '/api/reservations',
+    url: `/api/reservations`,
     data,
   });
 };
