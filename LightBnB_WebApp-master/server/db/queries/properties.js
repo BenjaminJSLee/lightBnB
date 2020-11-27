@@ -21,17 +21,17 @@ const getAllProperties = function(options, limit = 10) {
   if (options.owner_id || options.owner_id === 0) {
     values.push(options.owner_id);
     query = `${query}
-    ${values.length > 0 ? 'AND' : 'WHERE'} owner_id = $${values.length}`;
+    ${values.length > 1 ? 'AND' : 'WHERE'} owner_id = $${values.length}`;
   }
   if (options.minimum_price_per_night || options.minimum_price_per_night === 0) {
     values.push(options.minimum_price_per_night);
     query = `${query}
-    ${values.length > 0 ? 'AND' : 'WHERE'} cost_per_night >= $${values.length}`;
+    ${values.length > 1 ? 'AND' : 'WHERE'} cost_per_night >= $${values.length}`;
   }
   if (options.maximum_price_per_night || options.maximum_price_per_night === 0) {
     values.push(options.maximum_price_per_night);
     query = `${query}
-    ${values.length > 0 ? 'AND' : 'WHERE'} cost_per_night <= $${values.length}`;
+    ${values.length > 1 ? 'AND' : 'WHERE'} cost_per_night <= $${values.length}`;
   }
   query = `${query}
   GROUP BY properties.id`;
